@@ -7,40 +7,51 @@ p <- ggplot(df, aes(x = beta, y = r_squared)) +
   # Add points colored by effect direction
   geom_point(aes(color = effect_direction), size = 3, alpha = 0.8) +
   
-  # Add labels for predictors - ADD THIS PART HERE
+  # Add labels for predictors
   geom_text_repel(
-    aes(label = predictor),  # Or use selective labeling (see below)
-    size = 2.5,              # Small text for readability
-    box.padding = 0.3,       # Space around text
-    point.padding = 0.2,     # Space from point to text
-    segment.size = 0.3,      # Line thickness connecting label to point
-    segment.alpha = 0.6,     # Line transparency
-    max.overlaps = 20,       # Allow more overlaps if needed
-    seed = 42               # For reproducible label positions
+    aes(label = predictor),
+    size = 2.5,
+    box.padding = 0.3,
+    point.padding = 0.2,
+    segment.size = 0.3,
+    segment.alpha = 0.6,
+    max.overlaps = 20,
+    seed = 42
   ) +
   
   # Add quadrant lines
   geom_hline(yintercept = 0.06, linetype = "dashed", color = "gray50", linewidth = 0.5) +
   geom_vline(xintercept = 0, linetype = "dashed", color = "gray50", linewidth = 0.5) +
   
-  # Rest of your plot code...
-  scale_x_continuous(limits = c(-0.15, 0.15),
-                     breaks = seq(-0.15, 0.15, 0.05),
-                     labels = function(x) sprintf("%.2f", x)) +
+  # Set x-axis limits to focus on main cluster
+  scale_x_continuous(
+    limits = c(-0.15, 0.15),
+    breaks = seq(-0.15, 0.15, 0.05),
+    labels = function(x) sprintf("%.2f", x)
+  ) +
   
-  scale_y_continuous(limits = c(-0.02, 0.15),
-                     breaks = seq(0, 0.15, 0.05),
-                     labels = function(x) sprintf("%.2f", x)) +
+  # Set y-axis with reasonable limits  
+  scale_y_continuous(
+    limits = c(-0.02, 0.15),
+    breaks = seq(0, 0.15, 0.05),
+    labels = function(x) sprintf("%.2f", x)
+  ) +
   
-  scale_color_manual(values = c("Improves Rank" = "#2166ac", 
-                                "Worsens Rank" = "#b2182b"),
-                     name = "Effect Direction") +
+  # Color scheme
+  scale_color_manual(
+    values = c("Improves Rank" = "#2166ac", "Worsens Rank" = "#b2182b"),
+    name = "Effect Direction"
+  ) +
   
-  labs(title = "Hogan Predictors for AOM (Academic)",
-       subtitle = "Note: One predictor with β = -0.4 not shown",
-       x = "Standardized Beta (Direction of Effect)",
-       y = "Predictor Strength (|β|)") +
+  # Labels and title
+  labs(
+    title = "Hogan Predictors for AOM (Academic)",
+    subtitle = "Note: One predictor with β = -0.4 not shown",
+    x = "Standardized Beta (Direction of Effect)",
+    y = "Predictor Strength (|β|)"
+  ) +
   
+  # Theme adjustments
   theme_minimal(base_size = 11) +
   theme(
     plot.title = element_text(size = 12, face = "bold", margin = margin(b = 5)),
@@ -55,6 +66,9 @@ p <- ggplot(df, aes(x = beta, y = r_squared)) +
     panel.grid.major = element_line(linewidth = 0.3),
     plot.margin = margin(10, 10, 10, 10)
   )
+
+# Display the plot
+print(p)
 
 # Save the plot
 ggsave("hogan_quad_chart.png", p, width = 6, height = 4.5, dpi = 150)
