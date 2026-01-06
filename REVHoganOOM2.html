@@ -1,4 +1,7 @@
 # Version 3: Number the points and provide a separate legend
+library(ggplot2)
+
+# First, add ID numbers to your dataframe
 df$id <- 1:nrow(df)
 
 p_numbered <- ggplot(df, aes(x = beta, y = r_squared)) +
@@ -10,7 +13,7 @@ p_numbered <- ggplot(df, aes(x = beta, y = r_squared)) +
   scale_y_continuous(limits = c(-0.01, 0.15), breaks = seq(0, 0.15, 0.05)) +
   scale_color_manual(values = c("Improves Rank" = "#0571b0", "Worsens Rank" = "#ca0020")) +
   labs(
-    title = "Hogan Predictors for AOM (Academic)",
+    title = "Hogan Predictors for OOM",
     subtitle = "Numbers correspond to predictor list (outlier #X with β = -0.4 not shown)",
     x = "Standardized Beta",
     y = "R-squared"
@@ -25,5 +28,5 @@ p_numbered <- ggplot(df, aes(x = beta, y = r_squared)) +
 
 ggsave("hogan_numbered.png", p_numbered, width = 8, height = 6, dpi = 150)
 
-# Print the legend separately
+# Print the legend separately - corrected syntax
 print(df[order(-df$r_squared), c("id", "predictor", "beta", "r_squared")])
